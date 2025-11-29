@@ -1,0 +1,9 @@
+# Ignore build artifacts
+/target/
+
+# Optional: editor/OS junk
+.DS_Store
+*.swp
+
+
+
