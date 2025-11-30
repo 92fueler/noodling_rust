@@ -5,7 +5,6 @@
  *
  * return the most frequent word that is not banned.
  */
-
 struct Solution;
 
 impl Solution {
@@ -14,10 +13,8 @@ impl Solution {
 
 fn main() {
     let s: String = String::from("Bob hit a ball, the hit BALL flew far after it was hit.");
-
-    let banned: Vec<String> = vec!["hit"];
-
+    let banned: Vec<String> = vec![String::from("hit")];
     let result: String = Solution::most_common_words(s, banned);
 
-    println!("{:?}", result);
+    println!("{:?}", result); // expect "ball"
 }

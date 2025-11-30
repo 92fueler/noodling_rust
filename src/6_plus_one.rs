@@ -10,7 +10,9 @@ digit: 0 - 9
 returns a vector of digits
 */
 
-fn plus_one(digits: Vec<i32>) -> Vec<i32> {}
+// 1. implicit carry
+// 2. explicit carry
+fn plus_one(mut digits: Vec<i32>) -> Vec<i32> {}
 
 fn main() {
     let v1: Vec<i32> = vec![9];
