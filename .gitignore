@@ -5,6 +5,10 @@
 .DS_Store
 *.swp
 
-# Ignore rustc compiled executables in src/
-/src/*
-!/src/*.rs
+# Ignore everything under src
+src/*
+
+# BUT keep directories so we can un-ignore files inside them
+!src/**/
+# Keep all .rs files recursively
+!src/**/*.rs
