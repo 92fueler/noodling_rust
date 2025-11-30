@@ -11,12 +11,7 @@ struct Solution;
 impl Solution {
     // pub fn reverse_words(s: String) -> String {}
 
-    pub fn reverse_words_iii(s: String) -> String {
-        s.split_whitespace()
-            .map(|&w| w.chars().rev().collect())
-            .collect::<Vec<String>>()
-            .join(" ")
-    }
+    pub fn reverse_words_iii(s: String) -> String {}
 }
 
 fn main() {

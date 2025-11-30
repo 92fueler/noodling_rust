@@ -36,12 +36,7 @@ as i32
 
 // .split_whitespace() can handle multiple whitespaces
 // .split()
-pub fn length_of_last_word(s: String) -> i32 {
-    s.split(" ")
-        .filter(|&w| !w.is_empty())
-        .collect::<Vec<&str>>()
-        .len() as i32
-}
+pub fn length_of_last_word(s: String) -> i32 {}
 
 fn main() {
     let s1: String = String::from("   fly me   to   the moon  ");
