@@ -1,7 +1,7 @@
 /**
 26. Remove Duplicates from Sorted Array
 
-Given an interger array: non-decreasing order
+Given an integer array: non-decreasing order
 remove the duplicates in-place
 The relative order of the elements should be kept the same.
 */
