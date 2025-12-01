@@ -3,6 +3,9 @@
  * 1. definition
  * 2. traverse a list
  *
+ * prev.next                    // Type: Option<Box<ListNode>>
+ * prev.next.as_mut()           // Type: Option<&mut Box<ListNode>>
+ * prev.next.as_mut().unwrap()  // Type: &mut Box<ListNode>
  */
 
 // definition
@@ -17,52 +20,59 @@ impl ListNode {
     }
 }
 
-fn main() {
-    // in Python:
-    // while stops when node is None
-    // while node:
-    //     node = node.next
+struct Solution;
+impl Solution {
+    pub fn immutable_traverse(head: Option<Box<ListNode>>) {
+        println!("immutable: ");
+        let mut curr = &head; // immutable borrow
 
-    // immutable traversal
-    let mut curr = &head;
-
-    // while curr is Some, update curr to point to next
-    while let Some(node) = curr {
-        curr = &node.next;
-    }
-
-    // while stops when node is the last node
-    // while node and node.next:
-    //     node = node.next
-
-    // mutable traversal
-    let mut curr = &mut head;
-
-    while let Some(node) = curr {
-        if node.next.is_node() {
-            break; // after the break, node is the last node
+        while let Some(node) = curr {
+            // node &Box<T>
+            println!("{:?}", node.val);
+            curr = &node.next;
         }
-
-        curr = &mut node.next;
+        println!("done");
     }
 
-    // dummy node with mutable borrowing pattern
-    // allows:
-    // easy insertion at head, easy deletion of the first node
-    // curr is a mutable pointer to a pointer. This is how to mutate .next fields safely
-    let mut dummy: Option<Box<ListNode>> = Some(Box::new(ListNode { val: 0, next: head }));
+    pub fn mutable_traverse(mut head: Option<Box<ListNode>>) {
+        // add 1 to each node'val
+        println!("mutable: ");
+        let mut curr = &mut head; // mutable borrow
 
-    let mut curr = &mut dummy;
+        // while let Some(ref mut node) = curr {
+        //     node.val += 1;
+        //     println!("{:?}", node.val);
 
-    // 1. move curr to next node
-    curr = &mut curr.as_mut().unwrap().next; // move only one step
-    // curr is &mut             Option<Box<ListNode>>
-    // curr.as_mut().unwrap()   &mut Box<ListNode>>
-    // .next
-    // &mut next                becomes the next curr
+        //     curr = &mut node.next;
+        // }
 
-    // 2. move all the way to the end
-    while let Some(node) = curr {
-        curr = &mut node.next;
+        // while curr.is_some() {
+        //     println!("{:?}", curr.as_ref().unwrap().val);
+        //     curr = &mut curr.as_mut().unwrap().next;
+        // }
+
+        println!("done");
     }
+}
+fn main() {
+    let ll: Option<Box<ListNode>> = Some(Box::new(ListNode {
+        val: 1,
+        next: Some(Box::new(ListNode {
+            val: 2,
+            next: Some(Box::new(ListNode {
+                val: 3,
+                next: Some(Box::new(ListNode {
+                    val: 4,
+                    next: Some(Box::new(ListNode {
+                        val: 5,
+                        next: Some(Box::new(ListNode { val: 5, next: None })),
+                    })),
+                })),
+            })),
+        })),
+    }));
+    // 1-> 2-> 3-> 4 -> 5-> 5
+    // Solution::immutable_traverse(ll);
+
+    Solution::mutable_traverse(ll);
 }

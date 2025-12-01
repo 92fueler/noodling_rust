@@ -1,14 +1,18 @@
-# Ignore build artifacts
+# Rust build directory
 /target/
 
-# Optional: editor/OS junk
+# Optional: OS / editor stuff
 .DS_Store
 *.swp
+*.swo
+*.log
 
-# Ignore everything under src
-src/*
+# Ignore everything under src/
+src/**
 
-# BUT keep directories so we can un-ignore files inside them
+# Re-include all directories so git descends into them
 !src/**/
-# Keep all .rs files recursively
+
+# Re-include .rs files
 !src/**/*.rs
+
