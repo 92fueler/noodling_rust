@@ -24,15 +24,16 @@ struct Solution;
 impl Solution {
     pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut head = head;
-        let mut curr = head.as_mut();
+        let mut curr = &mut head;
 
         while let Some(node) = curr {
             while node.next.is_some() && node.val == node.next.as_ref().unwrap().val {
                 node.next = node.next.as_mut().unwrap().next.take();
             }
 
-            curr = node.next.as_mut();
+            curr = &mut node.next;
         }
+
         head
     }
 
