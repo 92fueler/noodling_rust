@@ -43,11 +43,15 @@ impl Solution {
             let curr_node = stack.pop().unwrap();
 
             // Borrow the node to access its fields
-            let node_ref = curr_node.borrow();
+            let node_ref: Ref<TreeNode> = curr_node.borrow();
             result.push(node_ref.val);
 
             // Push right first (so left is processed first - stack is LIFO)
             if let Some(right) = &node_ref.right {
+                // &node_ref.right is &Option<Rc<RefCell<TreeNode>>>
+                // right is &Rc<RefCell<TreeNode>>
+                // Rc::clone(right) is Rc<RefCell<TreeNode>>
+                // clone the rc (increments the reference count, doesn't clone the data)
                 stack.push(Rc::clone(right));
             }
 
