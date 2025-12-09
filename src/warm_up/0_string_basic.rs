@@ -6,12 +6,6 @@ fn main() {
     let s4: String = String::new(); // empty String
     let s5: &str = &s3; // String -> &str (borrowing)
 
-    println!("s1 (literal): {}", s1);
-    println!("s2 (to_string): {}", s2);
-    println!("s3 (from): {}", s3);
-    println!("s4 (new/empty): '{}'", s4);
-    println!("s5 (borrowed): {}\n", s5);
-
     println!("=== CONCATENATION (3 ways) ===");
     let mut s: String = String::from("hello");
     s += " world"; // append &str
@@ -32,15 +26,31 @@ fn main() {
     s.insert_str(11, "[STR]"); // insert &str at index
     println!("After insert_str: {}\n", s);
 
-    println!("=== POP (returns Option<char>) ===");
-    match s.pop() {
-        None => println!("String was empty"),
-        Some(c) => {
-            println!("Popped char: {:?}", c);
-            println!("As string: {}", c.to_string());
-        }
+    println!("=== POP (handle Option<char> (4 ways) ===");
+    // 1. if let - cleanest for simple cases
+    if let Some(c) = s.pop() {
+        println!("Popped char: {:?}", c);
+        println!("As string: {}", c.to_string());
     }
     println!("After pop: {}\n", s);
+
+    // 2. unwrap_or - provide default value
+    let mut s_test = String::from("test");
+    let c = s_test.pop().unwrap_or('_');
+    println!("Popped or default '_': {}", c);
+
+    // 3. unwrap_or_else - lazy default (closure only runs if None)
+    let mut s_empty = String::new();
+    let c = s_empty.pop().unwrap_or_else(|| {
+        println!("Empty string, using default!");
+        '?'
+    });
+    println!("Result: {}\n", c);
+
+    // 4. unwrap - panics if None (use when certain it's not empty)
+    let mut s_certain = String::from("x");
+    let c = s_certain.pop().unwrap();
+    println!("Unwrapped: {}\n", c);
 
     println!("=== REMOVE (returns char) ===");
     let removed_char = s.remove(10); // removes char at byte index, returns it
