@@ -18,6 +18,7 @@
  * Output: "s'teL ekat edoCteeL tsetnoc"
  */
 
+// This is the parent module (the file's root module)
 struct Solution;
 
 impl Solution {
@@ -58,9 +59,10 @@ impl Solution {
     // }
 }
 
+// This is a child module nested inside the parent
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::*; // Import everything from parent (Solution struct)
 
     #[test]
     fn test_reverse_words() {
