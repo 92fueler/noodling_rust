@@ -1,113 +1,197 @@
+/**
+ * 1. create a new string (5)
+ * 2. modify a string
+ *      - concatenate (4)
+ *      - insert (2)
+ *      - pop - handle Option<char>
+ *      - remove by idx
+ *      - truncate
+ *      - reverse a string (3)
+ *      - uppercase or lowercase
+ * 3. access by idx (4)
+ * 4. find() vs. position()
+ *      - find()        returns Option<usize>
+ *      - position()    for search inside iterators
+ * 5. string-level check
+ *      - is_empty()
+ *      - length
+ *      - substring in string
+ *      - starts with or ends with
+ *      - check entire string:
+ *          alphabetic, ascii, alphanumeric, numeric, ascii_digit,
+ *          lowercase, uppercase, whitespace
+ * 6. iterate: over bytes vs. chars
+ * 7. transform
+ *      - Given a string, split by comma and trim, then join back
+ *      - Given a string, capitalize first letter of each word
+ *
+ *
+ * 8. String <-> Vec conversion
+ *      - String        -> Vec<char>
+ *      - Vec<char>     -> String
+ *      - String        -> [u8]
+ *      - [u8]          -> String
+ *      - String        -> Vec<&str>
+ *      - Vec<&str>     -> String
+ *      - Vec<String>   -> String
+ *      - String        -> Vec<i32>  parse an integer string
+ *      - Vec<i32>      -> String
+ */
+
 fn main() {
-    println!("=== STRING CREATION (5 ways) ===");
+    // 1. create a new string (5)
     let s1: &str = "hello"; // string literal (immutable, stack/static)
     let s2: String = "hello".to_string(); // &str -> String (heap allocated)
     let s3: String = String::from("hello"); // same as to_string()
     let s4: String = String::new(); // empty String
     let s5: &str = &s3; // String -> &str (borrowing)
 
-    println!("=== CONCATENATION (3 ways) ===");
+    // 2. modify a string
+    // 2.1 concatenate (4)
     let mut s: String = String::from("hello");
     s += " world"; // append &str
     s.push('!'); // append single char
     s.push_str(" Jian"); // append &str
     println!("Concatenated: {}\n", s);
 
-    println!("=== FORMAT! MACRO ===");
     let word1 = "hello";
     let word2 = "world";
     let result: String = format!("{} {}!", word1, word2);
     println!("Formatted: {}\n", result);
 
-    println!("=== INSERT vs INSERT_STR ===");
+    // 2.2 insert (2)
     s.insert(10, '?'); // insert char at index (byte position)
     println!("After insert('?'): {}", s);
 
     s.insert_str(11, "[STR]"); // insert &str at index
     println!("After insert_str: {}\n", s);
 
-    println!("=== POP (handle Option<char> (4 ways) ===");
-    // 1. if let - cleanest for simple cases
+    // 2.3 pop - handle Option<char> (4)
+    // if let - cleanest for simple cases
     if let Some(c) = s.pop() {
         println!("Popped char: {:?}", c);
         println!("As string: {}", c.to_string());
     }
-    println!("After pop: {}\n", s);
 
-    // 2. unwrap_or - provide default value
+    // unwrap - panics if None (use when certain it's not empty)
+    let mut s_certain = String::from("x");
+    let c = s_certain.pop().unwrap();
+    println!("Unwrapped: {}\n", c);
+
+    // unwrap_or - provide default value
     let mut s_test = String::from("test");
     let c = s_test.pop().unwrap_or('_');
-    println!("Popped or default '_': {}", c);
 
-    // 3. unwrap_or_else - lazy default (closure only runs if None)
+    // unwrap_or_else - lazy default (closure only runs if None)
     let mut s_empty = String::new();
     let c = s_empty.pop().unwrap_or_else(|| {
         println!("Empty string, using default!");
         '?'
     });
-    println!("Result: {}\n", c);
 
-    // 4. unwrap - panics if None (use when certain it's not empty)
-    let mut s_certain = String::from("x");
-    let c = s_certain.pop().unwrap();
-    println!("Unwrapped: {}\n", c);
-
-    println!("=== REMOVE (returns char) ===");
+    // 2.4 remove by idx
     let removed_char = s.remove(10); // removes char at byte index, returns it
     println!("Removed char at index 10: {:?}", removed_char);
     println!("After remove: {}\n", s);
 
-    println!("=== POSITION & FIND ===");
-    let text = "hello world";
+    // 2.5 reverse
+    // text.reverse();  <-- ERROR!
+    // ❌ This doesn't work:
+    // let s = "hello";
+    // s.reverse(); // ERROR: `&str` is immutable
 
-    // find() returns Option<usize> (byte index)
-    match text.find('w') {
-        Some(idx) => println!("Found 'w' at byte index: {}", idx),
-        None => println!("Not found"),
-    }
+    // ❌ This also doesn't work:
+    // let mut s = String::from("hello");
+    // s.reverse(); // ERROR: String doesn't implement .reverse()
 
-    match text.find("world") {
-        Some(idx) => println!("Found 'world' at byte index: {}", idx),
-        None => println!("Not found"),
-    }
+    // reverse: chars vs. bytes
+    let text = "hello";
+    // let text = String::from("hello");
+    let reversed: String = text.chars().rev().collect(); // text is &str
+    let reversed: String = text.bytes().rev().map(|b| b as char).collect();
+    println!("\nreversed: {}", reversed);
+
+    let mut text_chars: Vec<char> = text.chars().collect();
+    text_chars.reverse();
+    println!("\ntext_chars: {:?}", text_chars);
+
+    // 3. access by idx (4)
+    let s = String::from("hello");
+
+    // byte slice
+    let byte_slice = &s[1..2]; // faster, but requires valid UTF-8 boundaries
+    println!("\nbyte slice: {}", byte_slice);
+
+    // convert to bytes (raw u8 access)
+    let bytes: &[u8] = s.as_bytes();
+    let first_char = bytes[0] as char; // only ASCII
+    println!("\nfirst char: {}", first_char);
+
+    // convert to Vec<char>
+    let s_chars: Vec<char> = s.chars().collect();
+
+    // use .chars().nth(idx)
+    let first_char = s.chars().nth(1).unwrap();
+    println!("\nfirst char: {}", first_char);
+
+    // 4. find by val - find() vs. position()
+    let s = "hello world";
+
+    assert_eq!(s.find("world"), Some(6)); // substring found at byte index 6
+    assert_eq!(s.find('o'), Some(4)); // first 'o' is at byte index 4
+    assert_eq!(s.find("xyz"), None); // not found
 
     // position() on chars iterator
-    match text.chars().position(|c| c == 'w') {
+    // Search an iterator and
+    // return the index of the first element where the predicate is true
+    match s.chars().position(|c| c == 'w') {
         Some(idx) => println!("Position of 'w' (char index): {}", idx),
         None => println!("Not found"),
     }
-    println!();
+    // 5. string-level check
+    let s: String = String::from("hello world");
+    let is_empty = s.is_empty();
+    let char_len = s.chars().count();
+    println!("char length: {}", char_len);
+    let byte_len = s.as_bytes().len();
+    println!("byte length: {}", byte_len);
 
-    println!("=== ITERATE ===");
+    // substring in string
+    // s.contains()
+    // s.to_lowercase().contains(substring.to_lowercase())
+    // s.find()
+
+    // starts with or ends with
+    // s.starts_with()
+    // s.ends_with()
+
+    // s.chars().all(|c| c.is_alphanumeric());
+    // s.as_bytes().all(|b| b.is_ascii_alphanumeric());
+
+    // 6. iterate
     let word = "hello";
 
     // iterate chars
-    print!("Chars: ");
     for c in word.chars() {
-        print!("{} ", c);
+        // word.chars -> Iterator<Item =char>
+        print!("{} ", c); // c is char bot &char
     }
-    println!();
 
     // iterate bytes
-    print!("Bytes: ");
     for b in word.bytes() {
-        print!("{} ", b);
+        // word.bytes -> Iterator<Item =u8>
+        print!("{} ", b); // b is byte not &byte
     }
-    println!("\n");
 
-    println!("=== ITERATE & TRANSFORM ===");
-    let text = "hello";
-
-    // to uppercase
-    let upper: String = text.chars().map(|c| c.to_uppercase().to_string()).collect();
-    println!("Uppercase: {}", upper);
-
-    // reverse
-    let reversed: String = text.chars().rev().collect();
-    println!("Reversed: {}\n", reversed);
-
-    println!("=== SPLIT, TRANSFORM, REJOIN ===");
-    let sentence = "hello world rust";
+    // 6. Transform
+    let sentence = "hello, world,  rust";
+    // split by comma, trim, and join back
+    let result = sentence
+        .split(',')
+        .map(|w| w.trim())
+        .collect::<Vec<&str>>()
+        .join(", ");
+    println!("trimmed: {}", result);
 
     // capitalize first letter of each word
     let transformed: String = sentence
@@ -127,10 +211,9 @@ fn main() {
         .collect::<Vec<String>>()
         .join(" ");
 
-    println!("Original: {}", sentence);
     println!("Capitalized: {}\n", transformed);
 
-    println!("=== STRING <-> VEC CONVERSIONS ===");
+    // 8. String <-> Vec conversion
 
     // String -> Vec<char>
     let chars: Vec<char> = "hello".chars().collect();

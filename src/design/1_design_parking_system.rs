@@ -1,7 +1,7 @@
 /**
  * 1603. Design Parking System
  */
-use std::collections::HashMap; // Fix typo: HahMap -> HashMap
+use std::collections::HashMap;
 
 struct ParkingSystem {
     parking_hashmap: HashMap<i32, i32>,

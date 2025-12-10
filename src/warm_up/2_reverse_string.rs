@@ -76,6 +76,7 @@ mod tests {
         Solution::reverse_string(&mut s);
         assert_eq!(s, vec!['o', 'l', 'l', 'e', 'h']);
     }
+
     #[test]
     fn test_example_1() {
         let s = String::from("abcdefg");

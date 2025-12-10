@@ -1,8 +1,8 @@
 /**
-27. Remove Element
-Given an integer array: nums and an integer: val
-remove all occurrences of val in nums in place
-
+ * 27. Remove Element
+ *
+ * Given an integer array: nums and an integer: val
+ * remove all occurrences of val in nums in place
 */
 
 fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {}

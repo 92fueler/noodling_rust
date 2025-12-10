@@ -2,8 +2,7 @@
  * 434. number of segments in a string
  *
  * Given a string s, return the number of segments in the string.
-
-A segment is defined to be a contiguous sequence of non-space characters.
+ * A segment is defined to be a contiguous sequence of non-space characters.
  */
 struct Solution;
 
