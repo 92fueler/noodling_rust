@@ -8,7 +8,8 @@ use std::collections::HashMap;
  *          - basic insert, return Option<V> for old value if key exists
  *          - insert only if key doesn't exist
  *          - insert and update the value
- *      - check if a key exists
+ *      - check if a key exists: contains_key() returns bool
+ *      - get by key: .get() vs. .get_mut()
  *      - remove a key-value pair
  *      - clear the entire hashmap
  *      - loop through the key-value pairs
@@ -51,28 +52,52 @@ fn main() {
         println!("Found!");
     }
 
+    // get by key
+    if let Some(v) = map.get("b") {
+        // .get() returns Option<&T>
+        println! {"{}", v}; // v is &v
+    }
+
+    let v = map.get("c").unwrap_or(&0);
+
+    // get by key and mutate val
+    if let Some(v) = map.get_mut("a") {
+        *v += 10;
+        println!("mutated val : {}", *v);
+    }
+
     if let Some(value) = map.remove("a") {
         // Remove - returns Option<V>
         println!("Removed: {}", value);
     }
+
     map.clear();
 
     // 3. loop through
     for (k, v) in &hash_map {
-        println!("{}: {}", k, v);
+        println!("{}: {}", k, v); // k: &k, v: &v
     }
 
     for (k, v) in &mut hash_map {
-        *v += 100;
+        // k: &k (can't modify keys, keys are immutable)
+        // v: &mut v
+
+        *v += 100; // mutate value
         println!("{}: {}", k, v);
     }
 
     for k in hash_map.keys() {
+        // k: &k
         println!("key: {}", k);
     }
 
     for k in hash_map.values() {
+        // v: &v
         println!("value: {}", k);
+    }
+
+    for v in hash_map.values_mut() {
+        *v += 10; // v: &mut v
     }
 
     // 4. Common pattern
