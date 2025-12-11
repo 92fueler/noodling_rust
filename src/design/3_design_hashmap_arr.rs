@@ -12,10 +12,6 @@ struct MyHashMap {
     buckets: Vec<Vec<(i32, i32)>>,
 }
 
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
 impl MyHashMap {
     fn new() -> Self {
         let mut buckets = Vec::with_capacity(BUCKETS);
