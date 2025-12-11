@@ -22,7 +22,11 @@ fn main() {
     let mut set: HashSet<&str> = HashSet::from(["apple", "banana", "pearl"]);
 
     // using collect() from iterator
-    let mut set: HashSet<_> = ["a", "b", "c"].iter().cloned().collect();
+    let mut set: HashSet<&str> = ["a", "b", "c"].iter().cloned().collect();
+
+    let v: Vec<String> = vec![String::from("flower"), String::from("FLOwer")];
+    let mut my_set: HashSet<String> = v.iter().map(|w| w.to_lowercase()).collect();
+    println!("my_set: {:?}", my_set);
 
     // 2. properties
     if set.is_empty() {
