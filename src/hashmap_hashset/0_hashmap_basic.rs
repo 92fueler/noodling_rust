@@ -5,8 +5,9 @@ use std::collections::HashMap;
  *  2. get hashmap properties: is_empty(), len()
  *  3. operations:
  *      - insert value by key
- *          - basic insert, return Option<V> for old value if key exists
- *          - insert only if key doesn't exist
+ *          - .insert(), override, return Option<V> for old value if key exists
+ *          - .or_insert(), non-override, insert only if key doesn't
+ *          - .or_insert_with(), lazy evaluation
  *          - insert and update the value
  *      - check if a key exists: contains_key() returns bool
  *      - get by key: .get() vs. .get_mut()
@@ -40,9 +41,19 @@ fn main() {
     // Insert only if key doesn't exist
     hash_map.entry("key").or_insert(50); // won't overwrite
 
+    // .or_insert() vs. or_insert_with()
+    // .or_insert(value): always evaluates value, even if the key exists.
+    // Example: or_insert(VecDeque::new()) allocates a new VecDeque even when you don’t need it.
+    // or_insert_with(|| value): Only constructs the value if the key is missing.
+    // .or_insert_with(VecDeque::new) Equivalent to: .or_insert_with(|| VecDeque::new())
+
     // Get mutable reference or insert default
     let value = hash_map.entry("key").or_insert(0);
-    *value += 10; // modify in place
+    *value += 10;
+
+    let value = hash_map.entry("new_key").or_insert_with(|| 1000);
+    *value += 1;
+
     println!("from last insert: {:?}", hash_map);
 
     let mut map = HashMap::from([("a", 1), ("b", 2)]);
