@@ -1,13 +1,17 @@
 /**
- * 49. group anagrams
- *
- * Given an array of strings strs,
- * group the anagrams together.
- *
- * sort_unstable(): Typically 20-50% faster
- * sort_unstable(): Uses O(1) auxiliary space
- * sort(): Uses O(n) auxiliary space
- */
+* 49. group anagrams
+*
+* Given an array of strings strs,
+* group the anagrams together.
+*
+* Input: strs = ["eat","tea","tan","ate","nat","bat"]
+* Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+*
+* sort_unstable(): Typically 20-50% faster
+* sort_unstable(): Uses O(1) auxiliary space
+* sort(): Uses O(n) auxiliary space
+*/
+use std::collections::HashMap;
 
 struct Solution;
 
@@ -18,18 +22,28 @@ impl Solution {
         // result is to convert hashmap.values into a vec of vec of strings.
         let mut map: HashMap<String, Vec<String>> = HashMap::new();
 
-        for s in strs {
+        for s in &strs {
             // Sort the string to use as key
             let mut chars: Vec<char> = s.chars().collect();
             chars.sort_unstable();
+
             let key: String = chars.iter().collect();
 
             // Group by sorted key
-            map.entry(key).or_insert(Vec::new()).push(s);
+            map.entry(key).or_insert_with(Vec::new).push(s.to_string());
         }
 
+        // approach 1: idiomatic Rust
         // Convert HashMap values to Vec<Vec<String>>
-        map.into_values().collect()
+        // map.into_values().collect()
+
+        // approach 2: more intuitive approach:
+        // let mut result: Vec<Vec<String>> = vec![];
+        // for v in map.values() {
+        //     result.push(v.clone());
+        // }
+
+        result
     }
 }
 
@@ -43,7 +57,7 @@ fn main() {
         String::from("bat"),
     ];
 
-    let result: Solution::group_anagrams(strs);
+    let result = Solution::group_anagrams(strs);
 
-    println!("{;?}", result);
+    println!("{:?}", result);
 }
